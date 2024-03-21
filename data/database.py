@@ -12,7 +12,7 @@ def save_translations(translations):
     conn = sqlite3.connect("translations.db")
     c = conn.cursor()
     for word, translation in translations.items():
-        if translation is "":
+        if translation == "":
             continue
         c.execute("INSERT OR REPLACE INTO translations (word, translation) VALUES (?, ?)", (word, translation))
     conn.commit()
