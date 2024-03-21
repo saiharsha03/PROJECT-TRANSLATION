@@ -2,5 +2,4 @@ streamlit
 pandas
 docx
 deep_translator
-cryptography
 exceptions

@@ -14,12 +14,17 @@ def main():
     if uploaded_file is not None:
         doc,translations = process_document(uploaded_file)
         save_translations(translations)
+        save_doc(doc, translations)
         
-        if st.button("Download Modified Document"):
-            download_modified_document(doc, translations)
-@st.cache
+    with open("modified_document.docx", "rb") as file:
+        st.download_button(
+            label="Download Modified Document",
+            data=file,
+            file_name="translated_Document.docx",
+            mime="application/octet-stream"
+        )
 
-def download_modified_document(doc, translations):    
+def save_doc(doc, translations):    
     for paragraph in doc.paragraphs:
         for word in translations:
             if f" {word} " in paragraph.text:
@@ -27,11 +32,3 @@ def download_modified_document(doc, translations):
 
     modified_filename = "modified_document.docx"
     doc.save(modified_filename)
-    
-    with open(modified_filename, "rb") as file:
-        st.download_button(
-            label="Download Modified Document",
-            data=file,
-            file_name=modified_filename,
-            mime="application/octet-stream"
-        )

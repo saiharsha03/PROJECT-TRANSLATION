@@ -34,19 +34,15 @@ def process_document(file):
     translations_new = {}
     st.subheader("Enter Translations:")
     
-    for word in df["Word"]:
-        translation = st.text_input(f"Enter translation for '{word}':", get_translation(word, translations))
-        translations_new[word.lower()] = translation
-
-    return doc,translations_new
-
-
-def get_translation(word, translations):
-    if word in translations:
-        return translations[word]
-    else:
-        return suggest_translation(word)
+    for word_index, word in enumerate(df["Word"]):
+        if st.button(f"Get Suggestions from Google ({word})", key=f"suggestion_button_{word_index}"):
+            translation = suggest_translation(word)
+        else:
+            translation = translations.get(word, '')
+        translations_new[word.lower()] = st.text_input(f"Enter translation for '{word}':", value=translation)
+    
+    return doc, translations_new
 
 def suggest_translation(word):
-    translation = GoogleTranslator(source='auto', target='te').translate(word) 
-    return translation
+    translated = GoogleTranslator(source='auto', target='te').translate(word)
+    return translated
